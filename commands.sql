@@ -9,3 +9,5 @@ CREATE TABLE blogs (
 insert into blogs (author, url, title) values ('Dan Abramov','https://overreacted.io/on-let-vs-const','On let vs const');
 
 insert into blogs (author, url, title) values ('Laurenz Albe','https://www.cybertec-postgresql.com/en/gaps-in-sequences-postgresql','Gaps in sequences in PostgreSQL');
+
+drop table blogs;
