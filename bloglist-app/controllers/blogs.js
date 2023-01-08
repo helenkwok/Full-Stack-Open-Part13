@@ -5,7 +5,13 @@ const { Blog } = require('../models')
 const { User } = require('../models')
 
 router.get('/', async (req, res) => {
-  const blogs = await Blog.findAll()
+  const blogs = await Blog.findAll({
+    attributes: { exclude: ['userId'] },
+    include: {
+      model: User,
+      attributes: ['name']
+    }
+  })
   res.json(blogs)
 })
 
@@ -22,14 +28,6 @@ const blogFinder = async (req, res, next) => {
   req.blog = await Blog.findByPk(req.params.id)
   next()
 }
-
-router.get('/:id', blogFinder, async (req, res) => {
-  if (req.blog) {
-    res.json(req.blog)
-  } else {
-    res.status(404).end()
-  }
-})
 
 router.delete('/:id', tokenExtractor, blogFinder, async (req, res) => {
   const user = await User.findByPk(req.decodedToken.id)
