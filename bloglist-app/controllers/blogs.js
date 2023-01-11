@@ -21,9 +21,18 @@ router.get('/', async (req, res) => {
       attributes: ['name']
     },
     where: {
-      title: {
-        [Op.iLike]: `%${search}%`
-      }
+      [Op.or]: [
+        {
+          title: {
+            [Op.iLike]: `%${search}%`
+          }
+        },
+        {
+          author: {
+            [Op.iLike]: `%${search}%`
+          }
+        }
+      ]
     }
   })
   res.json(blogs)
