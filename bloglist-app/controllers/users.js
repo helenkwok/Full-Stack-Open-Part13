@@ -8,10 +8,20 @@ const { SECRET, SALT_ROUNDS } = require('../util/config')
 router.get('/', async (req, res) => {
   const users = await User.findAll({
     attributes: { exclude: ['passwordHash'] },
-    include: {
-      model: Blog,
-      attributes: { exclude: ['userId'] }
-    }
+    include: [
+      {
+        model: Blog,
+        attributes: { exclude: ['userId'] }
+      },
+      {
+        model: Blog,
+        as: 'read_blogs',
+        attributes: { exclude: ['blogId']},
+        through: {
+          attributes: []
+        }
+      }
+    ]
   })
   res.json(users)
 })
