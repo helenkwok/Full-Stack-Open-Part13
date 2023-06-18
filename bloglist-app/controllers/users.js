@@ -1,8 +1,7 @@
 const bcrypt = require('bcrypt')
 const router = require('express').Router()
 
-const { Blog } = require('../models')
-const { User } = require('../models')
+const { Blog, User } = require('../models')
 const { SALT_ROUNDS } = require('../util/config')
 
 router.get('/', async (req, res) => {
@@ -12,7 +11,10 @@ router.get('/', async (req, res) => {
       {
         model: Blog,
         as: 'readings',
-        attributes: { exclude: ['userId', 'createdAt', 'updatedAt', 'reading_lists'] }
+        attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] },
+        through: {
+          attributes: [ 'id', 'read']
+        }
       }
     ]
   })
@@ -28,7 +30,7 @@ router.get('/:id', async (req, res) => {
         as: 'readings',
         attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] },
         through: {
-          attributes: []
+          attributes: [ 'id', 'read']
         }
       }
     ]

@@ -2,8 +2,7 @@ const { Op } = require("sequelize")
 const router = require('express').Router()
 const { tokenExtractor } = require('../util/middleware')
 
-const { Blog } = require('../models')
-const { User } = require('../models')
+const { Blog, User } = require('../models')
 
 router.get('/', async (req, res) => {
   let search
@@ -19,7 +18,11 @@ router.get('/', async (req, res) => {
     attributes: { exclude: ['userId'] },
     include: {
       model: User,
-      attributes: ['name']
+      as: 'readinglists',
+      attributes: ['name'],
+      through: {
+        attributes: [ 'id', 'read']
+      }
     },
     where: {
       [Op.or]: [

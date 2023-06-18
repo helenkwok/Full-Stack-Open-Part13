@@ -10,6 +10,10 @@ ReadingLists.init({
     primaryKey: true,
     autoIncrement: true
   },
+  read: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -24,7 +28,7 @@ ReadingLists.init({
   sequelize,
   underscored: true,
   timestamps: false,
-  modelName: 'reading_lists'
+  modelName: 'readingLists'
 })
 
 module.exports = ReadingLists
