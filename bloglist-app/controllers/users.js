@@ -3,27 +3,37 @@ const router = require('express').Router()
 
 const { Blog } = require('../models')
 const { User } = require('../models')
-const { SECRET, SALT_ROUNDS } = require('../util/config')
+const { SALT_ROUNDS } = require('../util/config')
 
 router.get('/', async (req, res) => {
   const users = await User.findAll({
-    attributes: { exclude: ['passwordHash'] },
+    attributes: { exclude: ['passwordHash', 'createdAt', 'updatedAt'] },
     include: [
       {
         model: Blog,
-        attributes: { exclude: ['userId'] }
-      },
+        as: 'readings',
+        attributes: { exclude: ['userId', 'createdAt', 'updatedAt', 'reading_lists'] }
+      }
+    ]
+  })
+  res.json(users)
+})
+
+router.get('/:id', async (req, res) => {
+  const user = await User.findByPk(req.params.id, {
+    attributes: { exclude: ['passwordHash', 'createdAt', 'updatedAt'] },
+    include: [
       {
         model: Blog,
-        as: 'read_blogs',
-        attributes: { exclude: ['blogId']},
+        as: 'readings',
+        attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] },
         through: {
           attributes: []
         }
       }
     ]
   })
-  res.json(users)
+  res.json(user)
 })
 
 router.post('/', async (req, res) => {
@@ -32,7 +42,7 @@ router.post('/', async (req, res) => {
   const user = await User.create({
     username,
     name,
-    passwordHash,
+    passwordHash
   })
     res.json(user)
 })
@@ -42,7 +52,7 @@ router.put('/:username', async (req, res) => {
     where: {
       username: req.params.username
     },
-    attributes: { exclude: ['passwordHash'] }
+    attributes: { exclude: ['password_hash'] }
   })
   if (user) {
     user.username = req.body.username

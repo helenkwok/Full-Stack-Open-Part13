@@ -28,7 +28,7 @@ Blog.init({
   },
   year: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
     validate: {
       min: 1991,
       max: new Date().getFullYear()
@@ -37,7 +37,7 @@ Blog.init({
 }, {
   sequelize,
   underscored: true,
-  timestamps: false,
+  timestamps: true,
   modelName: 'blog'
 })
 

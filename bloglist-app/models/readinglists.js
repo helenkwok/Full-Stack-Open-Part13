@@ -10,10 +10,6 @@ ReadingLists.init({
     primaryKey: true,
     autoIncrement: true
   },
-  read: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,

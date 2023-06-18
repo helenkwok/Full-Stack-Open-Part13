@@ -8,10 +8,6 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      read: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-      },
       user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
