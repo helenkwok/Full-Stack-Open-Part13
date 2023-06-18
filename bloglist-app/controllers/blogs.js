@@ -6,7 +6,7 @@ const { Blog, User } = require('../models')
 
 router.get('/', async (req, res) => {
   let search
-  //console.log(req.query.search)
+
   if (req.query.search) {
     search = req.query.search
   } else {
