@@ -1,9 +1,9 @@
 const { ReadingLists, User } = require('../models')
-const { tokenExtractor } = require('../util/middleware')
+const { tokenExtractor, userValidator } = require('../util/middleware')
 
 const router = require('express').Router()
 
-router.post('/', async (req, res) => {
+router.post('/', tokenExtractor, userValidator, async (req, res) => {
   const { blogId, userId } = req.body
 
   const reading = await ReadingLists.create({
@@ -13,12 +13,10 @@ router.post('/', async (req, res) => {
     res.json(reading)
 })
 
-router.put('/:id', tokenExtractor, async (req, res) => {
-  const user = await User.findByPk(req.decodedToken.id)
-
+router.put('/:id', tokenExtractor, userValidator, async (req, res) => {
   const readingList = await ReadingLists.findByPk(req.params.id)
 
-  const userCorrect = user.id === readingList.userId
+  const userCorrect = req.user.id === readingList.userId
 
   if (readingList && userCorrect) {
     const { read } = req.body

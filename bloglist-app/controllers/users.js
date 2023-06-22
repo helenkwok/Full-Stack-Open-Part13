@@ -1,11 +1,11 @@
 const bcrypt = require('bcrypt')
 const router = require('express').Router()
-const { Op } = require('sequelize')
+const { tokenExtractor, userValidator } = require('../util/middleware')
 
 const { Blog, User } = require('../models')
 const { SALT_ROUNDS } = require('../util/config')
 
-router.get('/', async (req, res) => {
+router.get('/', tokenExtractor, userValidator, async (req, res) => {
   const users = await User.findAll({
     attributes: { exclude: ['passwordHash', 'createdAt', 'updatedAt'] },
     include: [
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
   res.json(users)
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', tokenExtractor, userValidator, async (req, res) => {
   let where = {}
 
   if (req.query.read) {
@@ -57,7 +57,7 @@ router.post('/', async (req, res) => {
     res.json(user)
 })
 
-router.put('/:username', async (req, res) => {
+router.put('/:username', tokenExtractor, userValidator, async (req, res) => {
   const user = await User.findOne({
     where: {
       username: req.params.username

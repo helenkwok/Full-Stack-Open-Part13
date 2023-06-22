@@ -3,7 +3,7 @@ const { Blog, User } = require('../models')
 const { Op } = require('sequelize')
 const { sequelize } = require('../util/db')
 
-authorRouter.get('/', async (req, res) => {
+authorRouter.get('/', async (_req, res) => {
     authors = await Blog.findAll({
       order: [['likes', 'DESC']],
       attributes: [
